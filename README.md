@@ -1,3 +1,4 @@
+![parabolic_corr](https://user-images.githubusercontent.com/24655619/120843704-6baad700-c53c-11eb-8015-2ae14b6de4c0.png)
 # parabolic-regression
 How to fit a parabola to data
 

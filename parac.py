@@ -1,8 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import sys	
-from mpmath import *	# Enables arbitrarily long floating point variables with 
-# the mpf function. Set by default maybe to 100 digits after the decimal.
 from math import sqrt 
 from numpy import std,sqrt,mean,corrcoef,power,array
 # This program encodes Charles C. Peters 1946 paper "A New Descriptive Statistic: The Parabolic Correlation
@@ -14,27 +12,22 @@ def paracor (X,Y, foutt):
 	if len(X) != len (Y):
 		print ('The X and Y arrays are not of the same length.')
 		sys.exit()
-	# Put array elements in multiple precision format.
-	for i in range(len(X)):
-		X[i] = mpf(X[i])
-		Y[i] = mpf(Y[i])
-
 	# The first five of these eight terms are required to compute
 	# ordinary least squares regression (OLSR), straight line regression.
 	# The last three are the additional terms needed to compute
 	# the parabolic correlation statistics. See page 64.
-	sX=mpf(sum(X))
-	sY=mpf(sum(Y))
-	sXX=mpf(sum(X*X))
-	sYY=mpf(sum(Y*Y))
-	sXY=mpf(sum(X*Y))
-	sXsqY= mpf(sum(X*X)*sum(Y))
-	sXcu=mpf(sum(X*X*X))
-	sXfo=mpf(sum(X*X*X*X))
+	sX=sum(X)
+	sY=sum(Y)
+	sXX=sum(X*X)
+	sYY=sum(Y*Y)
+	sXY=sum(X*Y)
+	sXsqY= sum(X*X)*sum(Y)
+	sXcu=sum(X*X*X)
+	sXfo=sum(X*X*X*X)
 	
 	# Standard deviations.
-	stdX = mpf(std(X))
-	stdY= mpf(std(Y))
+	stdX = std(X)
+	stdY= std(Y)
 	N= len(X)
 	
 	# Equation (1) on the first page shows the standard form
@@ -53,9 +46,8 @@ def paracor (X,Y, foutt):
 	ratio_top = N*sXX - power(sX,2)
 	ratio_bot = N * sqrt(N*sYY-power(sY,2))
 	ic= c * (ratio_top/ratio_bot)
-	print (corrcoef(X,Y))
+	print ('Print correlation matrix so user sees what happens\n',corrcoef(X,Y))
 	to=corrcoef(X,Y)[0,1]
-	print (to)
 	t1=(c*(N*sXcu-N * mean(X)*sXX))/((N**2)*stdX*stdY)
 	isx =[]
 	for curx in list(X):
@@ -90,8 +82,8 @@ def paracor (X,Y, foutt):
 	if (2*N*stdX**2) == 0: critX=0
 	else:critX=(sXcu-mean(X)*sXX)/(2*N*stdX**2)
  	# This is an alternative method to compute crit.
-	# xxx= mpf(sum(x*x*x))
-	# cRad =mpf( sqrt((xxx**2)/((N**2)*(stdX**6))))
+	# xxx= sum(x*x*x))
+	# cRad = sqrt((xxx**2)/((N**2)*(stdX**6)))
 	# critb = mean(X)+.5*stdX*cRad 
 	if str(isx)=='nan' or str(isx) == 'inf' : isx =0
 	if str(curx)=='nan' or str(curx) == 'inf' : curx =0
